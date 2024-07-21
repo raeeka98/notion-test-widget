@@ -27,13 +27,23 @@
         async function fetchWordOfTheDay() {
             try {
                 const response = await fetch('https://www.merriam-webster.com/word-of-the-day?' + new Date().getTime());
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const text = await response.text();
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(text, 'text/html');
-                const word = doc.querySelector('.word-and-pronunciation h1').textContent;
-                const definition = doc.querySelector('.wod-definition-container p').textContent;
-                document.getElementById('word-of-the-day').textContent = word;
-                document.getElementById('definition').textContent = definition;
+                const wordElement = doc.querySelector('.word-and-pronunciation h1');
+                const definitionElement = doc.querySelector('.wod-definition-container p');
+                
+                if (wordElement && definitionElement) {
+                    const word = wordElement.textContent;
+                    const definition = definitionElement.textContent;
+                    document.getElementById('word-of-the-day').textContent = word;
+                    document.getElementById('definition').textContent = definition;
+                } else {
+                    throw new Error('Could not find word or definition elements on the page');
+                }
             } catch (error) {
                 document.getElementById('word-of-the-day').textContent = 'Error loading word';
                 document.getElementById('definition').textContent = '';
@@ -44,3 +54,4 @@
     </script>
 </body>
 </html>
+
