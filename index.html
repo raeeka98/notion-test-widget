@@ -25,26 +25,22 @@
     <div id="definition"></div>
     <script>
         async function fetchWordOfTheDay() {
-            const apiKey = 'YOUR_WORDSAPI_KEY';  // Replace with your WordsAPI key
-            const apiUrl = `https://wordsapiv1.p.rapidapi.com/words/?random=true`;
-            
             try {
                 console.log('Fetching word of the day...');
-                const response = await fetch(apiUrl, {
-                    method: 'GET',
-                    headers: {
-                        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
-                        'x-rapidapi-key': apiKey
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                const randomWordResponse = await fetch('https://random-word-api.herokuapp.com/word?number=1');
+                if (!randomWordResponse.ok) {
+                    throw new Error(`HTTP error! status: ${randomWordResponse.status}`);
                 }
-                
-                const data = await response.json();
-                const word = data.word;
-                const definition = data.results[0].definition;
+                const randomWord = await randomWordResponse.json();
+                const word = randomWord[0];
+                console.log('Random word:', word);
+
+                const dictionaryResponse = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                if (!dictionaryResponse.ok) {
+                    throw new Error(`HTTP error! status: ${dictionaryResponse.status}`);
+                }
+                const definitionData = await dictionaryResponse.json();
+                const definition = definitionData[0].meanings[0].definitions[0].definition;
                 
                 document.getElementById('word-of-the-day').textContent = word;
                 document.getElementById('definition').textContent = definition;
