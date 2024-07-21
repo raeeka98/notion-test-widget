@@ -45,7 +45,7 @@
                     throw new Error('Could not find word or definition elements on the page');
                 }
             } catch (error) {
-                document.getElementById('word-of-the-day').textContent = 'Error loading word';
+                document.getElementById('word-of-the-day').textContent = 'Error loading word-';
                 document.getElementById('definition').textContent = '';
                 console.error('Error fetching the word of the day:', error);
             }
