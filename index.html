@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Widget</title>
+    <title>Word of the Day Widget</title>
     <style>
         body {
             font-family: serif;
@@ -45,5 +45,60 @@
 </head>
 <body>
     <div id="content">
-        <div id="word-of
+        <div id="word-of-the-day">Loading...</div>
+        <div id="definition"></div>
+    </div>
+    <button id="refresh-button" onclick="fetchWordOfTheDay()">&#x21bb;</button>
+    <script>
+        async function fetchWordList() {
+            const response = await fetch('words.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const words = await response.json();
+            return words;
+        }
+
+        function getRandomWord(words) {
+            const randomIndex = Math.floor(Math.random() * words.length);
+            return words[randomIndex];
+        }
+
+        async function fetchWordDefinition(word) {
+            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            if (response.status === 404) {
+                throw new Error(`Word not found: ${word}`);
+            }
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            const definition = data[0].meanings[0].definitions[0].definition;
+            return definition;
+        }
+
+        async function fetchWordOfTheDay() {
+            try {
+                console.log('Fetching word of the day...');
+                document.getElementById('word-of-the-day').textContent = 'Loading...';
+                document.getElementById('definition').textContent = '';
+
+                const words = await fetchWordList();
+                const word = getRandomWord(words);
+                console.log('Random word:', word);
+                
+                const definition = await fetchWordDefinition(word);
+                document.getElementById('word-of-the-day').textContent = word;
+                document.getElementById('definition').textContent = definition;
+            } catch (error) {
+                document.getElementById('word-of-the-day').textContent = 'Error loading word';
+                document.getElementById('definition').textContent = error.message;
+                console.error('Error fetching the word of the day:', error);
+            }
+        }
+
+        fetchWordOfTheDay();
+    </script>
+</body>
+</html>
 
