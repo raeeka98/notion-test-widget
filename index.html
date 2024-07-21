@@ -3,20 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word of the Day Widget</title>
+    <title>Word of the Day</title>
     <style>
         body {
-            font-family: serif;
+            font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
-            background-color: #000;
-            color: white;
-        }
-        #content {
-            border: 1px solid white;
-            padding: 20px;
-            display: inline-block;
-            margin-top: 50px;
         }
         #word-of-the-day {
             font-size: 24px;
@@ -44,10 +36,9 @@
     </style>
 </head>
 <body>
-    <div id="content">
-        <div id="word-of-the-day">Loading...</div>
-        <div id="definition"></div>
-    </div>
+    <h1>Word of the Day</h1>
+    <div id="word-of-the-day">Loading...</div>
+    <div id="definition"></div>
     <button id="refresh-button" onclick="fetchWordOfTheDay()">&#x21bb;</button>
     <script>
         async function fetchWordList() {
