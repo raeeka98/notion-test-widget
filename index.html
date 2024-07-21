@@ -6,9 +6,16 @@
     <title>Word of the Day</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: sans-serif;
             text-align: center;
             padding: 20px;
+            background-color: #000;
+            color: white;
+        }
+        #content {
+            border: 1px solid white;
+            padding: 20px;
+            display: inline-block;
         }
         #word-of-the-day {
             font-size: 24px;
@@ -36,9 +43,10 @@
     </style>
 </head>
 <body>
-    <h1>Word of the Day</h1>
-    <div id="word-of-the-day">Loading...</div>
-    <div id="definition"></div>
+    <div id="content">
+        <div id="word-of-the-day">Loading...</div>
+        <div id="definition"></div>
+    </div>
     <button id="refresh-button" onclick="fetchWordOfTheDay()">&#x21bb;</button>
     <script>
         async function fetchRandomWord() {
@@ -72,23 +80,5 @@
                     const word = await fetchRandomWord();
                     console.log('Random word:', word);
                     try {
-                        const definition = await fetchWordDefinition(word);
-                        document.getElementById('word-of-the-day').textContent = word;
-                        document.getElementById('definition').textContent = definition;
-                        return;
-                    } catch (err) {
-                        console.warn(`Attempt ${i + 1} failed: ${err.message}`);
-                    }
-                }
-                throw new Error('Failed to fetch a valid word after multiple attempts');
-            } catch (error) {
-                document.getElementById('word-of-the-day').textContent = 'Error loading word';
-                document.getElementById('definition').textContent = error.message;
-                console.error('Error fetching the word of the day:', error);
-            }
-        }
+                        const definition = await fetchWordDefinition(word
 
-        fetchWordOfTheDay();
-    </script>
-</body>
-</html>
