@@ -3,19 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word of the Day</title>
     <style>
         body {
-            font-family: serif;
+            font-family: Serif;
             text-align: center;
             padding: 20px;
-            background-color: #000;
-            color: white;
-        }
-        #content {
-            border: 1px solid white;
-            padding: 20px;
-            display: inline-block;
-            margin-top: 50px;
         }
         #word-of-the-day {
             font-size: 24px;
@@ -43,10 +36,9 @@
     </style>
 </head>
 <body>
-    <div id="content">
-        <div id="word-of-the-day">Loading...</div>
-        <div id="definition"></div>
-    </div>
+    <h1>Word of the Day</h1>
+    <div id="word-of-the-day">Loading...</div>
+    <div id="definition"></div>
     <button id="refresh-button" onclick="fetchWordOfTheDay()">&#x21bb;</button>
     <script>
         async function fetchRandomWord() {
@@ -88,4 +80,15 @@
                         console.warn(`Attempt ${i + 1} failed: ${err.message}`);
                     }
                 }
-                throw 
+                throw new Error('Failed to fetch a valid word after multiple attempts');
+            } catch (error) {
+                document.getElementById('word-of-the-day').textContent = 'Error loading word';
+                document.getElementById('definition').textContent = error.message;
+                console.error('Error fetching the word of the day:', error);
+            }
+        }
+
+        fetchWordOfTheDay();
+    </script>
+</body>
+</html>
