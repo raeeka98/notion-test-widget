@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word of the Day</title>
+    <!-- <title>Word of the Day Widget</title> -->
     <style>
         body {
-            font-family: sans-serif;
+            font-family: serif;
             text-align: center;
             padding: 20px;
             background-color: #000;
@@ -16,6 +16,7 @@
             border: 1px solid white;
             padding: 20px;
             display: inline-block;
+            margin-top: 50px;
         }
         #word-of-the-day {
             font-size: 24px;
@@ -80,5 +81,12 @@
                     const word = await fetchRandomWord();
                     console.log('Random word:', word);
                     try {
-                        const definition = await fetchWordDefinition(word
-
+                        const definition = await fetchWordDefinition(word);
+                        document.getElementById('word-of-the-day').textContent = word;
+                        document.getElementById('definition').textContent = definition;
+                        return;
+                    } catch (err) {
+                        console.warn(`Attempt ${i + 1} failed: ${err.message}`);
+                    }
+                }
+                throw 
