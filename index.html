@@ -61,9 +61,9 @@
         }
 
         function formatDefinition(defs) {
-            // Format definitions with brackets around parts of speech
+            // Use a regex that matches standalone parts of speech, avoiding parts of the word
             return defs.map(def => {
-                return def.replace(/(\s|^)(n|v|adj|adv|prep|conj|interj)\s/g, ' [$2] ');
+                return def.replace(/\b(n|v|adj|adv|prep|conj|interj)\b\s/g, ' [$1] ');
             }).join('<br><br>');
         }
 
