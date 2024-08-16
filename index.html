@@ -92,6 +92,17 @@
         }
 
         fetchWordOfTheDay();
+
+        async function fetchWordList() {
+            const response = await fetch('words.json');
+            console.log('words.json response:', response); // Add this line to log the response
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const words = await response.json();
+            console.log('Words:', words); // Add this line to log the parsed words
+            return words;
+        }
     </script>
 </body>
 </html>
