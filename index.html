@@ -19,6 +19,9 @@
         #definition {
             font-size: 16px;
             color: white;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
         }
         #refresh-button {
             position: absolute;
@@ -57,14 +60,20 @@
             return words[randomIndex];
         }
 
+        function formatDefinition(defs) {
+            // Format definitions with brackets around parts of speech
+            return defs.map(def => {
+                return def.replace(/(\s|^)(n|v|adj|adv|prep|conj|interj)\s/g, ' [$2] ');
+            }).join('<br><br>');
+        }
+
         async function fetchWordDefinition(word) {
-            // Use the Datamuse API to fetch a definition
             const response = await fetch(`https://api.datamuse.com/words?sp=${word}&md=d&max=1`);
             if (!response.ok) {
                 return 'Definition not found';
             }
             const data = await response.json();
-            const definition = data[0]?.defs ? data[0].defs.join(', ') : 'Definition not found';
+            const definition = data[0]?.defs ? formatDefinition(data[0].defs) : 'Definition not found';
             return definition;
         }
 
@@ -79,7 +88,7 @@
                 
                 const definition = await fetchWordDefinition(word);
                 document.getElementById('word-of-the-day').textContent = word;
-                document.getElementById('definition').textContent = definition;
+                document.getElementById('definition').innerHTML = definition;
             } catch (error) {
                 document.getElementById('word-of-the-day').textContent = 'Error loading word';
                 document.getElementById('definition').textContent = error.message;
