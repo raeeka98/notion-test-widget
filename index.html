@@ -94,7 +94,7 @@
         fetchWordOfTheDay();
 
         async function fetchWordDefinition(word) {
-            const response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            const response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);//await fetch(`https://cors-anywhere.herokuapp.com/https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
             console.log(`API response for word "${word}":`, response);
             if (response.status === 404) {
                 throw new Error(`Word not found: ${word}`);
