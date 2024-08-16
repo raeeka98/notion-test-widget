@@ -93,16 +93,20 @@
 
         fetchWordOfTheDay();
 
-        async function fetchWordList() {
-            const response = await fetch('words.json');
-            console.log('words.json response:', response); // Add this line to log the response
+        async function fetchWordDefinition(word) {
+            const response = await fetch(`https://cors-anywhere.herokuapp.com/https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            console.log(`API response for word "${word}":`, response);
+            if (response.status === 404) {
+                throw new Error(`Word not found: ${word}`);
+            }
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const words = await response.json();
-            console.log('Words:', words); // Add this line to log the parsed words
-            return words;
-        }
+            const data = await response.json();
+            console.log('Definition data:', data);
+            const definition = data[0].meanings[0].definitions[0].definition;
+            return definition;
+    }
     </script>
 </body>
 </html>
