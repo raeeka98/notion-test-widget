@@ -44,13 +44,21 @@
         #next-definition-button {
             right: 60px; /* Positioning it next to the refresh button */
         }
+        #definition-counter {
+            position: absolute;
+            top: 20px;
+            right: 100px; /* Positioning it next to the next-definition button */
+            font-size: 14px;
+            color: #888;
+        }
     </style>
 </head>
 <body>
     <div id="word-of-the-day">Loading...</div>
     <div id="definition"></div>
+    <div id="definition-counter"></div>
     <button id="refresh-button" onclick="fetchWordOfTheDay()">&#x21bb;</button>
-    <button id="next-definition-button" onclick="showNextDefinition()">&#x27A1;</button> <!-- Right arrow icon for cycling -->
+    <button id="next-definition-button" onclick="showNextDefinition()" disabled>&#x27A1;</button> <!-- Initially disabled -->
     <script>
         let currentDefinitionIndex = 0;
         let currentDefinitions = [];
@@ -74,9 +82,26 @@
         }
 
         function showNextDefinition() {
-            if (currentDefinitions.length > 0) {
+            if (currentDefinitions.length > 1) {
                 currentDefinitionIndex = (currentDefinitionIndex + 1) % currentDefinitions.length;
                 document.getElementById('definition').innerHTML = currentDefinitions[currentDefinitionIndex];
+                updateDefinitionCounter();
+            }
+        }
+
+        function updateDefinitionCounter() {
+            const counter = document.getElementById('definition-counter');
+            counter.textContent = `${currentDefinitionIndex + 1}/${currentDefinitions.length}`;
+        }
+
+        function updateNextButtonState() {
+            const nextButton = document.getElementById('next-definition-button');
+            if (currentDefinitions.length > 1) {
+                nextButton.disabled = false;
+                nextButton.style.color = 'white';
+            } else {
+                nextButton.disabled = true;
+                nextButton.style.color = 'gray';
             }
         }
 
@@ -94,14 +119,18 @@
                 console.log('Fetching word of the day...');
                 document.getElementById('word-of-the-day').textContent = 'Loading...';
                 document.getElementById('definition').textContent = '';
+                document.getElementById('definition-counter').textContent = '';
 
                 const words = await fetchWordList();
                 const word = getRandomWord(words);
                 
                 currentDefinitions = await fetchWordDefinition(word);
                 currentDefinitionIndex = 0;
+
                 document.getElementById('word-of-the-day').textContent = word;
                 document.getElementById('definition').innerHTML = currentDefinitions[currentDefinitionIndex];
+                updateDefinitionCounter();
+                updateNextButtonState();
             } catch (error) {
                 document.getElementById('word-of-the-day').textContent = 'Error loading word';
                 document.getElementById('definition').textContent = error.message;
@@ -112,4 +141,3 @@
     </script>
 </body>
 </html>
-
